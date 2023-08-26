@@ -4,9 +4,5 @@
 from inc_cfg import *
 
 test_param = TestParam(
-		"Basic run", 
-		[
-			InstanceParam("pjsua", "--null-audio --rtp-port 0")
-		]
-		)
-
+    "Basic run", [InstanceParam("pjsua", "--null-audio --rtp-port 0")]
+)

@@ -3,8 +3,7 @@ import inc_sdp as sdp
 
 # Offer contains "sendonly" attribute in the session. Answer should
 # respond with appropriate direction in session or media
-sdp = \
-"""
+sdp = """
 v=0
 o=- 0 0 IN IP4 127.0.0.1
 s=-
@@ -16,12 +15,15 @@ m=audio 5000 RTP/AVP 0
 
 pjsua_args = "--null-audio --auto-answer 200"
 extra_headers = ""
-include = ["Content-Type: application/sdp",	# response must include SDP
-	       "a=recvonly"
-	   ]
+include = ["Content-Type: application/sdp", "a=recvonly"]  # response must include SDP
 exclude = []
 
-sendto_cfg = sip.SendtoCfg("SDP direction in session", pjsua_args, sdp, 200,
-			   extra_headers=extra_headers,
-			   resp_inc=include, resp_exc=exclude) 
-
+sendto_cfg = sip.SendtoCfg(
+    "SDP direction in session",
+    pjsua_args,
+    sdp,
+    200,
+    extra_headers=extra_headers,
+    resp_inc=include,
+    resp_exc=exclude,
+)

@@ -150,6 +150,20 @@ install:
 		sed -e "s!@PJ_INSTALL_LDFLAGS_PRIVATE@!$(PJ_INSTALL_LDFLAGS_PRIVATE)!" | \
 		sed -e "s!@PJ_INSTALL_CFLAGS@!$(PJ_INSTALL_CFLAGS)!" > $(DESTDIR)$(libdir)/pkgconfig/libpjproject.pc
 
+print-install:
+	@echo "DESTDIR = $(DESTDIR)"
+	@echo "libdir = $(libdir)"
+	@echo "PJ_EXCLUDE_PJSUA2 = $(PJ_EXCLUDE_PJSUA2)"
+	@echo "APP_LIBXX_FILES = $(APP_LIBXX_FILES)"
+	@echo "APP_LIB_FILES = $(APP_LIB_FILES)"
+	@echo "includedir = $(includedir)"
+	@echo "prefix = $(prefix)"
+	@echo "PJ_VERSION = $(PJ_VERSION)"
+	@echo "PJ_INSTALL_LDFLAGS = $(PJ_INSTALL_LDFLAGS)"
+	@echo "PJ_INSTALL_LDFLAGS_PRIVATE = $(PJ_INSTALL_LDFLAGS_PRIVATE)"
+	@echo "PJ_INSTALL_CFLAGS = $(PJ_INSTALL_CFLAGS)"
+
+
 uninstall:
 	$(RM) $(DESTDIR)$(libdir)/pkgconfig/libpjproject.pc
 	rmdir $(DESTDIR)$(libdir)/pkgconfig 2> /dev/null || true

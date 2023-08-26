@@ -4,7 +4,8 @@ import time
 from collections import deque
 import struct
 
-write=sys.stdout.write
+write = sys.stdout.write
+
 
 #
 # Basic data structure test, to make sure basic struct
@@ -44,8 +45,9 @@ def ua_data_test():
 
     write("  Dumping nameservers: " + "\r\n")
     for s in uc2.nameserver:
-        write(s  + "\r\n")
+        write(s + "\r\n")
     write("\r\n")
+
 
 #
 # Exception test
@@ -58,14 +60,18 @@ def ua_run_test_exception():
     try:
         ep.natDetectType()
     except pj.Error as e:
-        #t, e = sys.exc_info()[:2]
+        # t, e = sys.exc_info()[:2]
         got_exception = True
-        write("  Got exception: status=%u, reason=%s,\n  title=%s,\n  srcFile=%s, srcLine=%d" % \
-            (e.status, e.reason, e.title, e.srcFile, e.srcLine) + "\r\n")
+        write(
+            "  Got exception: status=%u, reason=%s,\n  title=%s,\n  srcFile=%s, srcLine=%d"
+            % (e.status, e.reason, e.title, e.srcFile, e.srcLine)
+            + "\r\n"
+        )
         assert e.status == 370050
         assert e.reason.find("PJNATH_ESTUNINSERVER") >= 0
         assert e.title == "pjsua_detect_nat_type()"
     assert got_exception
+
 
 #
 # Custom log writer
@@ -73,6 +79,7 @@ def ua_run_test_exception():
 class MyLogWriter(pj.LogWriter):
     def write(self, entry):
         write("This is Python:" + entry.msg + "\r\n")
+
 
 class AMP(pj.AudioMediaPort):
     frames = deque()
@@ -87,27 +94,28 @@ class AMP(pj.AudioMediaPort):
     def onFrameReceived(self, frame):
         frame_ = pj.ByteVector()
         for i in range(frame.buf.size()):
-            if (i % 2 == 1):
+            if i % 2 == 1:
                 # Convert it to signed 16-bit integer
-                x = frame.buf[i] << 8 | frame.buf[i-1]
-                x = struct.unpack('<h', struct.pack('<H', x))[0]
+                x = frame.buf[i] << 8 | frame.buf[i - 1]
+                x = struct.unpack("<h", struct.pack("<H", x))[0]
 
                 # Amplify the signal by 50% and clip it
                 x = int(x * 1.5)
-                if (x > 32767):
+                if x > 32767:
                     x = 32767
                 else:
-                    if (x < -32768):
+                    if x < -32768:
                         x = -32768
 
                 # Convert it to unsigned 16-bit integer
-                x = struct.unpack('<H', struct.pack('<h', x))[0]
+                x = struct.unpack("<H", struct.pack("<h", x))[0]
 
                 # Put it back in the vector in little endian order
-                frame_.append(x & 0xff)
-                frame_.append((x & 0xff00) >> 8)
+                frame_.append(x & 0xFF)
+                frame_.append((x & 0xFF00) >> 8)
 
         self.frames.append(frame_)
+
 
 #
 # Testing log writer callback
@@ -118,12 +126,15 @@ def ua_run_log_test():
 
     lw = MyLogWriter()
     ep_cfg.logConfig.writer = lw
-    ep_cfg.logConfig.decor = ep_cfg.logConfig.decor & ~(pj.PJ_LOG_HAS_CR | pj.PJ_LOG_HAS_NEWLINE)
+    ep_cfg.logConfig.decor = ep_cfg.logConfig.decor & ~(
+        pj.PJ_LOG_HAS_CR | pj.PJ_LOG_HAS_NEWLINE
+    )
 
     ep = pj.Endpoint()
     ep.libCreate()
     ep.libInit(ep_cfg)
     ep.libDestroy()
+
 
 #
 # Simple create, init, start, and destroy sequence
@@ -152,8 +163,11 @@ def ua_run_ua_test():
 
     time.sleep(3)
     del amp
-    write("************* Endpoint started ok, now shutting down... *************" + "\r\n")
+    write(
+        "************* Endpoint started ok, now shutting down... *************" + "\r\n"
+    )
     ep.libDestroy()
+
 
 #
 # Tone generator
@@ -179,7 +193,7 @@ def ua_tonegen_test():
     tones.append(tone)
 
     digit = pj.ToneDigit()
-    digit.digit = '0'
+    digit.digit = "0"
     digit.on_msec = 1000
     digit.off_msec = 1000
     digits = pj.ToneDigitVector()
@@ -210,6 +224,7 @@ def ua_tonegen_test():
 
     ep.libDestroy()
 
+
 #
 # main()
 #
@@ -220,5 +235,3 @@ if __name__ == "__main__":
     ua_run_ua_test()
     ua_tonegen_test()
     sys.exit(0)
-
-

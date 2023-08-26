@@ -7,6 +7,7 @@ from inc_cfg import *
 # Load configuration
 cfg_file = util.load_module_from_file("cfg_file", ARGS[1])
 
+
 # Trigger address switch for media flow between ua1 and ua2.
 # When the receiver uses STUN while both sides are actually in the same
 # private network, initial media packets may be sent to public IP address
@@ -58,12 +59,16 @@ def test_func(t):
         time.sleep(1)
     if caller.inst_param.have_reg:
         time.sleep(1)
-        
+
     # Check if ICE is used
-    use_ice = ("--use-ice" in caller.inst_param.arg) and ("--use-ice" in callee.inst_param.arg)
+    use_ice = ("--use-ice" in caller.inst_param.arg) and (
+        "--use-ice" in callee.inst_param.arg
+    )
 
     # Check if STUN is used (by either side)
-    use_stun = ("--stun-srv" in caller.inst_param.arg) or ("--stun-srv" in callee.inst_param.arg)
+    use_stun = ("--stun-srv" in caller.inst_param.arg) or (
+        "--stun-srv" in callee.inst_param.arg
+    )
 
     # Check if DTLS-SRTP is used
     use_dtls_srtp = "--srtp-keying=1" in caller.inst_param.arg
@@ -75,7 +80,7 @@ def test_func(t):
         caller.send("m")
         caller.send(t.inst_params[0].uri)
     caller.expect(const.STATE_CALLING)
-    
+
     # Callee waits for call and answers with 180/Ringing
     time.sleep(0.2)
     callee.expect(const.EVENT_INCOMING_CALL)
@@ -109,20 +114,20 @@ def test_func(t):
     ##time.sleep(0.1)
     caller.sync_stdout()
     callee.sync_stdout()
-    
+
     # Wait ICE nego before checking media
     if use_ice:
         # Unfortunately ICE nego may race with STATE_CONFIRMED (esp. on callee side), so let's just sleep
-        #caller.expect("ICE negotiation success")
-        #callee.expect("ICE negotiation success")
+        # caller.expect("ICE negotiation success")
+        # callee.expect("ICE negotiation success")
         # Additional wait for ICE updating address (via UPDATE/re-INVITE)
         time.sleep(0.5)
 
     # Wait DTLS-SRTP nego before checking media
     if use_dtls_srtp:
         # Unfortunately DTLS-SRTP nego may race with STATE_CONFIRMED, so let's just sleep
-        #caller.expect("SRTP started, keying=DTLS-SRTP")
-        #callee.expect("SRTP started, keying=DTLS-SRTP")
+        # caller.expect("SRTP started, keying=DTLS-SRTP")
+        # callee.expect("SRTP started, keying=DTLS-SRTP")
         time.sleep(0.5)
 
     # Trigger address switch before checking media
@@ -142,7 +147,7 @@ def test_func(t):
     callee.expect("INVITE sip:")
     callee.expect(const.MEDIA_HOLD)
     caller.expect(const.MEDIA_HOLD)
-    
+
     # Synchronize stdout
     caller.sync_stdout()
     callee.sync_stdout()
@@ -183,7 +188,7 @@ def test_func(t):
     caller.expect("INVITE sip:")
     caller.expect(const.MEDIA_HOLD)
     callee.expect(const.MEDIA_HOLD)
-    
+
     # Synchronize stdout
     caller.sync_stdout()
     callee.sync_stdout()
@@ -222,10 +227,10 @@ def test_func(t):
         caller.send("call update")
     else:
         caller.send("U")
-    #caller.sync_stdout()
+    # caller.sync_stdout()
     callee.expect(const.MEDIA_ACTIVE, title="waiting for media active with UPDATE")
     caller.expect(const.MEDIA_ACTIVE, title="waiting for media active with UPDATE")
-    
+
     # Synchronize stdout
     caller.sync_stdout()
     callee.sync_stdout()
@@ -248,7 +253,7 @@ def test_func(t):
     caller.expect("UPDATE sip:")
     caller.expect(const.MEDIA_ACTIVE, title="waiting for media active with UPDATE")
     callee.expect(const.MEDIA_ACTIVE, title="waiting for media active with UPDATE")
-    
+
     # Synchronize stdout
     caller.sync_stdout()
     callee.sync_stdout()
@@ -308,7 +313,7 @@ def test_func(t):
     callee.expect("SIP/2.0 488")
     callee.sync_stdout()
     caller.sync_stdout()
-    
+
     # Test that media is still okay
     ##time.sleep(0.1)
     check_media(caller, callee)
@@ -325,7 +330,7 @@ def test_func(t):
     caller.expect("SIP/2.0 488")
     caller.sync_stdout()
     callee.sync_stdout()
-    
+
     # Test that media is still okay
     ##time.sleep(0.1)
     check_media(callee, caller)
@@ -341,9 +346,8 @@ def test_func(t):
     # Wait until calls are cleared in both endpoints
     caller.expect(const.STATE_DISCONNECTED)
     callee.expect(const.STATE_DISCONNECTED)
-    
+
 
 # Here where it all comes together
 test = cfg_file.test_param
 test.test_func = test_func
-

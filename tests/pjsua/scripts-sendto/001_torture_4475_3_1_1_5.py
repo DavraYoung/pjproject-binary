@@ -3,9 +3,8 @@ import inc_sdp as sdp
 
 # Torture message from RFC 4475
 # 3.1.1.  Valid Messages
-# 3.1.1.5. Use of % When It Is Not an Escape 
-complete_msg = \
-"""RE%47IST%45R sip:registrar.example.com SIP/2.0
+# 3.1.1.5. Use of % When It Is Not an Escape
+complete_msg = """RE%47IST%45R sip:registrar.example.com SIP/2.0
 To: "%Z%45" <sip:resource@example.com>
 From: "%Z%45" <sip:resource@example.com>;tag=f232jadfj23
 Call-ID: esc02.asdfnqwo34rq23i34jrjasdcnl23nrlknsdf
@@ -18,7 +17,10 @@ Contact: <sip:alias3@host3.example.com>
 l: 0
 """
 
-sendto_cfg = sip.SendtoCfg( "RFC 4475 3.1.1.5", 
-			    "--null-audio --auto-answer 200", 
-			    "", 405, complete_msg=complete_msg)
-
+sendto_cfg = sip.SendtoCfg(
+    "RFC 4475 3.1.1.5",
+    "--null-audio --auto-answer 200",
+    "",
+    405,
+    complete_msg=complete_msg,
+)

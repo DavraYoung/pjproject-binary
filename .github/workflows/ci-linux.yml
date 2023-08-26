@@ -65,7 +65,7 @@ jobs:
     - name: config site
       run: cd pjlib/include/pj && cp config_site_test.h config_site.h
     - name: configure
-      run: CFLAGS="-g" LDFLAGS="-rdynamic" ./configure
+      run: CFLAGS="-g" LDFLAGS="-rdynamic" ./configure --enable-shared
     - name: make
       run: make
     - name: unit tests

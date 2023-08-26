@@ -15,10 +15,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 import sys
-if sys.version_info[0] >= 3: # Python 3
+
+if sys.version_info[0] >= 3:  # Python 3
     import tkinter as tk
     from tkinter import ttk
     from tkinter import messagebox as msgbox
@@ -35,7 +36,9 @@ class Endpoint(pj.Endpoint):
     """
     This is high level Python object inherited from pj.Endpoint
     """
+
     instance = None
+
     def __init__(self):
         pj.Endpoint.__init__(self)
         Endpoint.instance = self
@@ -44,9 +47,10 @@ class Endpoint(pj.Endpoint):
 def validateUri(uri):
     return Endpoint.instance.utilVerifyUri(uri) == pj.PJ_SUCCESS
 
+
 def validateSipUri(uri):
     return Endpoint.instance.utilVerifySipUri(uri) == pj.PJ_SUCCESS
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     application.main()

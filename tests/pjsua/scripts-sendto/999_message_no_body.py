@@ -3,8 +3,7 @@ import inc_sdp as sdp
 
 # Incoming MESSAGE without body is now accepted
 #
-complete_msg = \
-"""MESSAGE sip:localhost SIP/2.0
+complete_msg = """MESSAGE sip:localhost SIP/2.0
 Via: SIP/2.0/UDP 192.168.0.14:5060;rport;branch=z9hG4bKPj9db9
 Max-Forwards: 70
 From: <sip:192.168.0.14>;tag=08cd5bfc2d8a4fddb1f5e59c6961d298
@@ -18,6 +17,10 @@ Content-Length: 50
 """
 
 
-sendto_cfg = sip.SendtoCfg( "empty MESSAGE", "--null-audio --auto-answer 200", 
-			    "", 200, complete_msg=complete_msg)
-
+sendto_cfg = sip.SendtoCfg(
+    "empty MESSAGE",
+    "--null-audio --auto-answer 200",
+    "",
+    200,
+    complete_msg=complete_msg,
+)
